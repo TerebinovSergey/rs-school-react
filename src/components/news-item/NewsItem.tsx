@@ -10,6 +10,7 @@ type SearchProps = {
 class NewsList extends Component<SearchProps> {
   render() {
     const { title, author, url } = this.props;
+    console.log(author, url);
     return (
       <div className={styles.news}>
         <span className={styles.news__title}>{title}</span>
@@ -18,7 +19,9 @@ class NewsList extends Component<SearchProps> {
           <span>{author}</span>
         </div>
 
-        <a href={url}>Link to news</a>
+        <a style={{ display: url !== '' ? 'block' : 'none' }} href={url}>
+          Link to news
+        </a>
       </div>
     );
   }
