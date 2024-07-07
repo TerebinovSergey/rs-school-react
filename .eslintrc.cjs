@@ -11,6 +11,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
     'react',
+    'react-compiler',
     'react-hooks',
     '@typescript-eslint',
     'react-refresh',
@@ -23,5 +24,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-explicit-any': 'error',
+    'react-compiler/react-compiler': 'error',
   },
 };
