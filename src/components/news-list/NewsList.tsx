@@ -1,4 +1,7 @@
 import { Component } from 'react';
+import Title from '../title/Title';
+import NewsItem from '../news-item/NewsItem.tsx';
+import styles from './NewsList.module.css';
 
 const BASE_PATH = 'https://hn.algolia.com/api/v1/';
 const SEARCH_PATH = '/search';
@@ -25,23 +28,39 @@ const responceNewsInit: ResponceNews = {
   page: 0,
 };
 
-class NewsList extends Component {
+type NewsListState = {
+  result: ResponceNews;
+};
+
+type SearchProps = {
+  query: string;
+};
+
+class NewsList extends Component<SearchProps, NewsListState> {
   state = {
-    serachQuery: 'world',
     result: responceNewsInit,
   };
 
-  componentDidMount(): void {
-    const { serachQuery } = this.state;
-    fetch(
-      `${BASE_PATH}${SEARCH_PATH}?${SEARCH_PARAM}${serachQuery}&page=1&hitsPerPage=10`,
-    )
+  loadNews() {
+    const { query } = this.props;
+    fetch(`${BASE_PATH}${SEARCH_PATH}?${SEARCH_PARAM}${query}`)
       .then((res) => res.json() as Promise<ResponceNews>)
       .then((result) => this.setNews(result))
       .catch((error: unknown) => console.log(error));
   }
 
+  componentDidMount(): void {
+    this.loadNews();
+  }
+
+  componentDidUpdate(prevProps: SearchProps): void {
+    if (prevProps.query !== this.props.query) {
+      this.loadNews();
+    }
+  }
+
   setNews = (result: ResponceNews) => {
+    console.dir(result);
     this.setState({ result });
   };
 
@@ -50,11 +69,16 @@ class NewsList extends Component {
       result: { hits },
     } = this.state;
     return (
-      <div className="wpapper">
-        <h1>News</h1>
-        <ul>
+      <div>
+        <Title title="News" />
+        <ul className={styles.newsList}>
           {hits.map(({ title, author, url, objectID }) => {
-            return <li key={objectID}>{`${title} ${author} ${url}`}</li>;
+            return (
+              <li className={styles.news} key={objectID}>
+                {' '}
+                <NewsItem title={title} author={author} url={url} />
+              </li>
+            );
           })}
         </ul>
       </div>

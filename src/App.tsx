@@ -10,13 +10,14 @@ class App extends Component {
 
   onSearch = (serachQuery: string): void => {
     this.setState({ serachQuery });
+    console.log(serachQuery);
   };
 
   render() {
     return (
       <>
         <Search onSubmit={this.onSearch} />
-        <NewsList />
+        <NewsList query={this.state.serachQuery} />
       </>
     );
   }
