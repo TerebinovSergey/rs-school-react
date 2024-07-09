@@ -10,7 +10,6 @@ type SearchProps = {
 class NewsList extends Component<SearchProps> {
   render() {
     const { title, author, url } = this.props;
-    console.log(author, url);
     return (
       <div className={styles.news}>
         <span className={styles.news__title}>{title}</span>
