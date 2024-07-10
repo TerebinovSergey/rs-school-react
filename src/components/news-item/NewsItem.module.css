@@ -1,0 +1,16 @@
+.news {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #3eadf7;
+  border-radius: 15px;
+}
+
+.news__title {
+  font-size: large;
+  font-weight: 600;
+}
+
+.news__author {
+  font-weight: 600;
+}
