@@ -1,22 +1,21 @@
-import { FormEvent, useState } from 'react';
-import { SearchStorage } from '../../storage/SearchStorage';
+import { FormEvent } from 'react';
 import styles from './Search.module.css';
+import useSearchQuery from '../../hooks/useSearchQuery.ts';
 
 interface Props {
   onSubmit: (query: string) => void;
 }
 
 function Search({ onSubmit }: Props) {
-  const [query, setQuery] = useState(SearchStorage.getQuery());
+  const [queryHook, setQueryHook] = useSearchQuery();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setQueryHook(event.target.value);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    SearchStorage.saveQuery(query);
-    onSubmit(query);
+    onSubmit(queryHook);
   };
 
   return (
@@ -24,7 +23,7 @@ function Search({ onSubmit }: Props) {
       <input
         className={styles.formSearch__input}
         type="text"
-        value={query}
+        value={queryHook}
         onChange={handleChange}
         placeholder="Enter the person's name"
       />
