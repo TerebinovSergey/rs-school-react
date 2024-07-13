@@ -1,71 +1,51 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import Title from '../title/Title.tsx';
 import PeopleItem from '../people-item/PeopleItem.tsx';
 import styles from './PeopleList.module.css';
 import Loader from '../loader/Loader.tsx';
-import { ListOfPeople, listOfPeopleInit, Swapi } from '../../services/Swapi.ts';
-
-type State = {
-  result: ListOfPeople;
-  load: boolean;
-};
+import { listOfPeopleInit, Swapi } from '../../services/Swapi.ts';
 
 type Props = {
   query: string;
 };
 
-class PeopleList extends Component<Props, State> {
-  state = {
-    result: listOfPeopleInit,
-    load: false,
-  };
+function PeopleList({ query }: Props) {
+  const [listOfPeople, setListOfPeople] = useState(listOfPeopleInit);
+  const [isLoad, setIsLoad] = useState(false);
 
-  async loadPeople() {
-    this.setState({ load: true });
-    const { query } = this.props;
-    const listOfPeople = await Swapi.getPeople(query);
-    this.setState({ load: false, result: listOfPeople });
+  useEffect(() => {
+    const loadPeople = async () => {
+      setIsLoad(true);
+      const listOfPeople = await Swapi.getPeople(query);
+      setListOfPeople(listOfPeople);
+      setIsLoad(false);
+    };
+    loadPeople();
+  }, [query]);
+
+  if (isLoad) {
+    return <Loader />;
   }
 
-  componentDidMount(): void {
-    this.loadPeople();
-  }
-
-  componentDidUpdate(prevProps: Props): void {
-    if (prevProps.query !== this.props.query) {
-      this.loadPeople();
-    }
-  }
-
-  render() {
-    const {
-      result: { results },
-      load,
-    } = this.state;
-    if (load) {
-      return <Loader />;
-    }
-    return (
-      <div>
-        <Title title="People" />
-        <ul className={styles.peopleList}>
-          {results.map(({ name, height, url, mass }) => {
-            return (
-              <li className={styles.people} key={url}>
-                {' '}
-                <PeopleItem
-                  name={name ?? ''}
-                  height={height ?? ''}
-                  mass={mass ?? ''}
-                  url={url ?? ''}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Title title="People" />
+      <ul className={styles.peopleList}>
+        {listOfPeople.results.map(({ name, height, url, mass }) => {
+          return (
+            <li className={styles.people} key={url}>
+              {' '}
+              <PeopleItem
+                name={name ?? ''}
+                height={height ?? ''}
+                mass={mass ?? ''}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 export default PeopleList;

@@ -1,13 +1,9 @@
-import { Component } from 'react';
-
-interface TitleProps {
+interface PropsType {
   title: string;
 }
 
-class Title extends Component<TitleProps> {
-  render() {
-    return <h1>{this.props.title}</h1>;
-  }
+function Title({ title }: PropsType) {
+  return <h1>{title}</h1>;
 }
 
 export default Title;

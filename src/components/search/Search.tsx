@@ -1,43 +1,38 @@
-import { Component, FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { SearchStorage } from '../../storage/SearchStorage';
 import styles from './Search.module.css';
 
-interface SearchProps {
+interface Props {
   onSubmit: (query: string) => void;
 }
 
-class Search extends Component<SearchProps> {
-  state = {
-    query: SearchStorage.getQuery(),
+function Search({ onSubmit }: Props) {
+  const [query, setQuery] = useState(SearchStorage.getQuery());
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
   };
 
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ query: event.target.value });
-  };
-
-  handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { query } = this.state;
     SearchStorage.saveQuery(query);
-    this.props.onSubmit(query);
+    onSubmit(query);
   };
 
-  render() {
-    return (
-      <form className={styles.formSearch} onSubmit={this.handleSubmit}>
-        <input
-          className={styles.formSearch__input}
-          type="text"
-          value={this.state.query}
-          onChange={this.handleChange}
-          placeholder="Enter the person's name"
-        />
-        <button className={styles.formSearch__button} type="submit">
-          Search
-        </button>
-      </form>
-    );
-  }
+  return (
+    <form className={styles.formSearch} onSubmit={handleSubmit}>
+      <input
+        className={styles.formSearch__input}
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Enter the person's name"
+      />
+      <button className={styles.formSearch__button} type="submit">
+        Search
+      </button>
+    </form>
+  );
 }
 
 export default Search;

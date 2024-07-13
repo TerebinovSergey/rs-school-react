@@ -1,27 +1,23 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 
-class ErrorThrowing extends Component {
-  state = {
-    makeMistake: false,
-  };
+function ErrorThrowing() {
+  const [makeMistake, setMakeMistake] = useState(false);
 
-  componentDidUpdate(): void {
-    if (this.state.makeMistake) {
+  useEffect(() => {
+    if (makeMistake) {
       throw new Error('This is a custom error');
     }
-  }
+  });
 
-  render() {
-    return (
-      <button
-        onClick={() => {
-          this.setState({ makeMistake: true });
-        }}
-      >
-        To make a mistake
-      </button>
-    );
-  }
+  return (
+    <button
+      onClick={() => {
+        setMakeMistake(true);
+      }}
+    >
+      To make a mistake
+    </button>
+  );
 }
 
 export default ErrorThrowing;

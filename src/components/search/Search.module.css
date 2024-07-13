@@ -12,6 +12,7 @@
   border: 1px solid #3eadf7;
   font-size: 1rem;
 }
-.formSearch__input:focus {
+.formSearch__input:focus,
+.formSearch__button:focus {
   outline: none;
 }
