@@ -1,4 +1,4 @@
-.news {
+.people {
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -6,11 +6,7 @@
   border-radius: 15px;
 }
 
-.news__title {
+.people__subtitle {
   font-size: large;
-  font-weight: 600;
-}
-
-.news__author {
   font-weight: 600;
 }

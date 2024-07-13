@@ -30,7 +30,7 @@ class Search extends Component<SearchProps> {
           type="text"
           value={this.state.query}
           onChange={this.handleChange}
-          placeholder="Enter your request..."
+          placeholder="Enter the person's name"
         />
         <button className={styles.formSearch__button} type="submit">
           Search
