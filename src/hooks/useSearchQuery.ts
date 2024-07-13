@@ -14,7 +14,7 @@ export default function useSearchQuery(): [
 
   useEffect(() => {
     return () => {
-      SearchStorage.saveQuery(query);
+      SearchStorage.saveQuery(queryRef.current);
     };
   });
 
