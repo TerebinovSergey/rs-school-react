@@ -29,7 +29,7 @@ function PeopleList({ query }: Props) {
     const loadPeople = async () => {
       setIsLoad(true);
       const listOfPeople = await Swapi.getPeople(query, currentPage);
-      if (!listOfPeople.count) {
+      if (listOfPeople.count === undefined) {
         navigate(`?page=1`);
         setCurrentPage(1);
         return;
@@ -65,6 +65,10 @@ function PeopleList({ query }: Props) {
 
   if (isLoad) {
     return <Loader />;
+  }
+
+  if (listOfPeople.count === undefined || listOfPeople.count === 0) {
+    return <h3>Not found</h3>;
   }
 
   return (
