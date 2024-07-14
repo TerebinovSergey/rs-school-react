@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import Title from '../title/Title.tsx';
 import PeopleItem from '../people-item/PeopleItem.tsx';
 import styles from './PeopleList.module.css';
@@ -7,6 +7,8 @@ import {
   listOfPeopleInit,
   Swapi,
   ITEMS_PER_PAGE,
+  PERSON_PARAM,
+  PAGE_PARAM,
 } from '../../services/Swapi.ts';
 import Pagination from '../pagination/Pagination.tsx';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -27,7 +29,6 @@ function PeopleList({ query }: Props) {
     const loadPeople = async () => {
       setIsLoad(true);
       const listOfPeople = await Swapi.getPeople(query, currentPage);
-
       if (!listOfPeople.count) {
         navigate(`?page=1`);
         setCurrentPage(1);
@@ -42,8 +43,8 @@ function PeopleList({ query }: Props) {
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const page = parseInt(query.get('page') || '1', 10);
-    if (page !== Number(query.get('page'))) {
+    const page = parseInt(query.get(PAGE_PARAM) || '1', 10);
+    if (page !== Number(query.get(PAGE_PARAM))) {
       navigate(`?page=${page}`, { replace: true });
     }
     setCurrentPage(page);
@@ -51,6 +52,15 @@ function PeopleList({ query }: Props) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handlePersonClick = (event: MouseEvent<HTMLLIElement>, url: string) => {
+    event.stopPropagation();
+    const pathUrl = url.split('/');
+    const id = pathUrl[pathUrl.length - 2];
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set(PERSON_PARAM, id);
+    navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
   if (isLoad) {
@@ -63,7 +73,11 @@ function PeopleList({ query }: Props) {
       <ul className={styles.peopleList}>
         {listOfPeople.results.map(({ name, height, url, mass }) => {
           return (
-            <li className={styles.people} key={url}>
+            <li
+              onClick={(event) => handlePersonClick(event, url)}
+              className={styles.people}
+              key={url}
+            >
               {' '}
               <PeopleItem
                 name={name ?? ''}

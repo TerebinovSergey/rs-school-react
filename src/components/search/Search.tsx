@@ -1,6 +1,7 @@
 import { FormEvent } from 'react';
 import styles from './Search.module.css';
 import useSearchQuery from '../../hooks/useSearchQuery.ts';
+import ErrorThrowing from '../error-throwing/ErrorThrowing.tsx';
 
 interface Props {
   onSubmit: (query: string) => void;
@@ -30,6 +31,7 @@ function Search({ onSubmit }: Props) {
       <button className={styles.formSearch__button} type="submit">
         Search
       </button>
+      <ErrorThrowing />
     </form>
   );
 }
