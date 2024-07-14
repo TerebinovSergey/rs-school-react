@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import styles from './ErrorThrowing.module.css';
 
 function ErrorThrowing() {
   const [makeMistake, setMakeMistake] = useState(false);
@@ -11,6 +12,7 @@ function ErrorThrowing() {
 
   return (
     <button
+      className={styles.buttonError}
       onClick={() => {
         setMakeMistake(true);
       }}

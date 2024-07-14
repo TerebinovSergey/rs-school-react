@@ -1,6 +1,7 @@
 const BASE_PATH = 'https://swapi.dev/api/people/';
 const SEARCH_PARAM = 'search=';
 const PAGE_PARAM = 'page=';
+export const ITEMS_PER_PAGE = 10;
 
 export type People = {
   name: string;
@@ -24,10 +25,10 @@ export const listOfPeopleInit: ListOfPeople = {
 };
 
 export class Swapi {
-  static async getPeople(query: string) {
+  static async getPeople(query: string, page: number) {
     try {
       const response = await fetch(
-        `${BASE_PATH}?${PAGE_PARAM}1&${SEARCH_PARAM}${query}`,
+        `${BASE_PATH}?${PAGE_PARAM}${page}&${SEARCH_PARAM}${query}`,
       );
       const people: ListOfPeople = await response.json();
       return people;
