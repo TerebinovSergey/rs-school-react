@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SearchStorage } from '../storage/SearchStorage.ts';
 
-export default function useSearchQuery(): [
+function useSearchQuery(): [
   string,
   React.Dispatch<React.SetStateAction<string>>,
 ] {
@@ -20,3 +20,5 @@ export default function useSearchQuery(): [
 
   return [query, setQuery];
 }
+
+export default useSearchQuery;

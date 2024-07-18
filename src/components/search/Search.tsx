@@ -20,7 +20,11 @@ function Search({ onSubmit }: Props) {
   };
 
   return (
-    <form className={styles.formSearch} onSubmit={handleSubmit}>
+    <form
+      data-testid="form"
+      className={styles.formSearch}
+      onSubmit={handleSubmit}
+    >
       <input
         className={styles.formSearch__input}
         type="text"
