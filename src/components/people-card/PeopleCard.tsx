@@ -5,19 +5,17 @@ import styles from './PeopleCard.module.css';
 import { useNavigate } from 'react-router-dom';
 
 function PeopleCard() {
-  const [person, setPerson] = useState(personInit);
-  const [isLoad, setIsLoad] = useState(false);
+  const [state, setState] = useState({ person: personInit, isLoad: false });
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const personId = searchParams.get(PERSON_PARAM);
 
   useEffect(() => {
-    if (!personId) return;
     const loadPerson = async () => {
-      setIsLoad(true);
+      if (!personId) return;
+      setState((prevState) => ({ ...prevState, isLoad: true }));
       const person = await Swapi.getPerson(Number(personId ?? 0));
-      setPerson(person);
-      setIsLoad(false);
+      setState({ person, isLoad: false });
     };
     loadPerson();
   }, [personId]);
@@ -27,44 +25,38 @@ function PeopleCard() {
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  if (!personId || !person.name) return <></>;
+  if (!personId || !state.person.name) return <></>;
 
-  if (isLoad) {
+  if (state.isLoad) {
     return <Loader />;
   }
+
+  const personDetails = [
+    { label: 'Name', value: state.person.name, id: 1 },
+    { label: 'Height', value: state.person.height, id: 2 },
+    { label: 'Mass', value: state.person.mass, id: 3 },
+    {
+      label: 'Skin color',
+      value: state.person.skin_color,
+      id: 4,
+    },
+    { label: 'Eye color', value: state.person.eye_color, id: 5 },
+    { label: 'Birthday', value: state.person.birth_year, id: 6 },
+    { label: 'Gender', value: state.person.gender, id: 7 },
+  ];
 
   return (
     <div className={styles.wrapper}>
       <h1>Card</h1>
       <div className={styles.personCard}>
-        <div>
-          <span className={styles.personCard__subtitle}>Name: </span>
-          <span>{person.name}</span>
-        </div>
-        <div>
-          <span className={styles.personCard__subtitle}>Height: </span>
-          <span>{person.height}</span>
-        </div>
-        <div>
-          <span className={styles.personCard__subtitle}>Mass: </span>
-          <span>{person.mass}</span>
-        </div>
-        <div>
-          <span className={styles.personCard__subtitle}>Skin color: </span>
-          <span>{person.skin_color}</span>
-        </div>
-        <div>
-          <span className={styles.personCard__subtitle}>Eye color: </span>
-          <span>{person.eye_color}</span>
-        </div>
-        <div>
-          <span className={styles.personCard__subtitle}>Birthday: </span>
-          <span>{person.birth_year}</span>
-        </div>
-        <div>
-          <span className={styles.personCard__subtitle}>Gender: </span>
-          <span>{person.gender}</span>
-        </div>
+        {personDetails.map((detail) => (
+          <div key={detail.id}>
+            <span className={styles.personCard__subtitle}>
+              {detail.label}:{' '}
+            </span>
+            <span>{detail.value}</span>
+          </div>
+        ))}
         <button onClick={handleClose}>Close</button>
       </div>
     </div>

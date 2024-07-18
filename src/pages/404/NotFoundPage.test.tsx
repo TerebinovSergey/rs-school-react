@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import NotFoundPage from './NotFoundPage.tsx';
 import { MemoryRouter } from 'react-router-dom';
+import { PagePaths } from '../../utils/utils.ts';
 
 describe('not found page', () => {
   it('renders a title with the text "Not found"', () => {
@@ -14,28 +15,25 @@ describe('not found page', () => {
     expect(titleElement).toBeInTheDocument();
   });
 
-  it('renders a button with text "Go home"', () => {
+  it('renders a link with text "Go home"', () => {
     render(
       <MemoryRouter>
         <NotFoundPage />
       </MemoryRouter>,
     );
 
-    const buttonElement = screen.getByRole('button', { name: 'Go home' });
-    expect(buttonElement).toBeInTheDocument();
+    const linkElement = screen.getByRole('link', { name: 'Go home' });
+    expect(linkElement).toBeInTheDocument();
   });
 
-  it('calls onClick when clicked on the button with the text "Go home"', () => {
-    const mockClick = vi.fn();
-
+  it('contains a link to the main page', () => {
     render(
       <MemoryRouter>
         <NotFoundPage />
       </MemoryRouter>,
     );
 
-    const buttonElement = screen.getByRole('button', { name: 'Go home' });
-    fireEvent.click(buttonElement);
-    expect(mockClick).toHaveBeenCalledTimes(1);
+    const linkElement = screen.getByRole('link', { name: 'Go home' });
+    expect(linkElement).toHaveAttribute('href', PagePaths.Main);
   });
 });

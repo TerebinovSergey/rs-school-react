@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Pagination.module.css';
+import { PAGE_PARAM } from '../../services/Swapi';
 
 interface Props {
   totalItems: number;
@@ -14,24 +15,23 @@ const Pagination = ({
   currentPage,
   onPageChange,
 }: Props) => {
-  const navigate = useNavigate();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     onPageChange(page);
-    navigate(`?page=${page}`);
   };
 
   return (
     <div className={styles.wrapper}>
       {Array.from({ length: totalPages }, (_, index) => (
-        <button
+        <Link
           key={index}
           onClick={() => handlePageChange(index + 1)}
-          disabled={index + 1 === currentPage}
+          className={`${styles.link}${index + 1 === currentPage ? ' ' + styles.disabled : ''}`}
+          to={`?${PAGE_PARAM}=${index + 1}`}
         >
           {index + 1}
-        </button>
+        </Link>
       ))}
     </div>
   );

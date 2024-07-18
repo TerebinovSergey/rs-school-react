@@ -1,17 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { PagePaths } from '../../utils/utils.ts';
+import styles from './NotFoundPage.module.css';
 
 function NotFoundPage() {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(PagePaths.Main);
-  };
-
   return (
     <>
       <h1>Not found</h1>
-      <button onClick={handleClick}>Go home</button>
+      <Link className={styles.link} to={PagePaths.Main}>
+        Go home
+      </Link>
     </>
   );
 }
