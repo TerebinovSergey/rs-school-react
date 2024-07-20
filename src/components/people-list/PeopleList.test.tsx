@@ -2,18 +2,18 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter, useNavigate, useLocation } from 'react-router-dom';
 import PeopleList from './PeopleList';
-import { Swapi, listOfPeopleInit } from '../../services/Swapi';
+import { Swapi } from '../../services/Swapi.ts';
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router-dom', async (importOriginal) => {
+  const module = await importOriginal<typeof import('react-router-dom')>();
   return {
-    ...actual,
+    ...module,
     useNavigate: vi.fn(),
     useLocation: vi.fn(),
   };
 });
 
-vi.mock('../../services/Swapi', () => ({
+vi.mock('../../services/Swapi.ts', () => ({
   Swapi: {
     getPeople: vi.fn(),
   },
@@ -31,6 +31,11 @@ describe('PeopleList component', () => {
   const mockLocation = {
     search: '',
     pathname: '/people',
+  };
+
+  const listOfPeopleInit = {
+    count: 0,
+    results: [],
   };
 
   beforeEach(() => {

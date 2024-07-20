@@ -14,5 +14,12 @@
 
 .people:hover {
   cursor: pointer;
+}
+
+.lightPeople:hover {
   box-shadow: 4px 5px 3px 1px rgba(0, 0, 255, 0.2);
+}
+
+.darkPeople:hover {
+  box-shadow: 4px 5px 3px 1px rgba(239, 239, 242, 0.2);
 }

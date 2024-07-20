@@ -1,3 +1,4 @@
+import { useTheme } from '../../contexts/ThemeContext.ts';
 import styles from './PeopleItem.module.css';
 
 type Props = {
@@ -7,8 +8,10 @@ type Props = {
 };
 
 function PeopleItem({ name, height, mass }: Props) {
+  const { theme } = useTheme();
+
   return (
-    <div className={styles.people}>
+    <div className={`${styles[`${theme}People`]} ${styles.people}`}>
       <div>
         <span className={styles.people__subtitle}>Name: </span>
         <span>{name}</span>

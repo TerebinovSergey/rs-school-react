@@ -4,9 +4,14 @@
   font-weight: 400;
 }
 
+#root {
+  width: 100%;
+}
+
 body {
   margin: 0;
   display: flex;
+  width: 100vw;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -29,6 +34,7 @@ button:hover {
 }
 
 button:focus,
+button:active,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
 }
