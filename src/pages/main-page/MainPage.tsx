@@ -5,7 +5,7 @@ import { SearchStorage } from '../../storage/SearchStorage.ts';
 import { Outlet, useNavigate } from 'react-router-dom';
 import styles from './MainPage.module.css';
 import { PagePaths } from '../../utils/utils.ts';
-import { PERSON_PARAM } from '../../services/Swapi.ts';
+import { PERSON_PARAM } from '../../services/types.ts';
 
 function MainPage() {
   const [searchQuery, setSearchQuery] = useState(SearchStorage.getQuery());

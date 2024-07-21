@@ -4,42 +4,34 @@ import PeopleItem from '../people-item/PeopleItem.tsx';
 import styles from './PeopleList.module.css';
 import Loader from '../loader/Loader.tsx';
 import {
-  listOfPeopleInit,
-  Swapi,
   ITEMS_PER_PAGE,
   PERSON_PARAM,
   PAGE_PARAM,
-} from '../../services/Swapi.ts';
+} from '../../services/types.ts';
 import Pagination from '../pagination/Pagination.tsx';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { starWarsApi } from '../../services/starWarsApi.ts';
 
 type Props = {
   query: string;
 };
 
 function PeopleList({ query }: Props) {
-  const [listOfPeople, setListOfPeople] = useState(listOfPeopleInit);
-  const [isLoad, setIsLoad] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+  const { data, error, isLoading } = starWarsApi.useGetPeopleQuery({
+    query,
+    page: currentPage,
+  });
 
   useEffect(() => {
-    const loadPeople = async () => {
-      setIsLoad(true);
-      const listOfPeople = await Swapi.getPeople(query, currentPage);
-      if (listOfPeople === undefined || listOfPeople.count === undefined) {
-        navigate(`?page=1`);
-        setCurrentPage(1);
-        return;
-      }
-      setListOfPeople(listOfPeople);
-      setTotalItems(listOfPeople.count);
-      setIsLoad(false);
-    };
-    loadPeople();
-  }, [query, currentPage, navigate]);
+    if (!data || data.count === undefined || error !== undefined) {
+      navigate(`?page=1`);
+      setCurrentPage(1);
+      return;
+    }
+  }, [data, error, navigate]);
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -63,11 +55,11 @@ function PeopleList({ query }: Props) {
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  if (isLoad) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  if (listOfPeople.count === undefined || listOfPeople.count === 0) {
+  if (!data || data.count === 0) {
     return <h3>Not found</h3>;
   }
 
@@ -75,7 +67,7 @@ function PeopleList({ query }: Props) {
     <>
       <Title title="People" />
       <ul className={styles.peopleList}>
-        {listOfPeople.results.map(({ name, height, url, mass }) => {
+        {data.results.map(({ name, height, url, mass }) => {
           return (
             <li
               onClick={(event) => handlePersonClick(event, url)}
@@ -93,7 +85,7 @@ function PeopleList({ query }: Props) {
         })}
       </ul>
       <Pagination
-        totalItems={totalItems}
+        totalItems={data.count}
         itemsPerPage={ITEMS_PER_PAGE}
         currentPage={currentPage}
         onPageChange={handlePageChange}

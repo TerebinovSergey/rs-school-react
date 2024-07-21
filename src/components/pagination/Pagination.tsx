@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './Pagination.module.css';
-import { PAGE_PARAM } from '../../services/Swapi';
+import { PAGE_PARAM } from '../../services/types.ts';
 
 interface Props {
   totalItems: number;
