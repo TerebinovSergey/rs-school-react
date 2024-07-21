@@ -1,0 +1,18 @@
+.people {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #3eadf7;
+  border-radius: 15px;
+  transition: all 0.3s;
+}
+
+.people__subtitle {
+  font-size: large;
+  font-weight: 600;
+}
+
+.people:hover {
+  cursor: pointer;
+  box-shadow: 4px 5px 3px 1px rgba(0, 0, 255, 0.2);
+}
