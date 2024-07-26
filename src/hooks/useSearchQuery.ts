@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchStorage } from '../storage/SearchStorage.ts';
 
 function useSearchQuery(): [
@@ -6,17 +6,10 @@ function useSearchQuery(): [
   React.Dispatch<React.SetStateAction<string>>,
 ] {
   const [query, setQuery] = useState(SearchStorage.getQuery());
-  const queryRef = useRef(query);
 
   useEffect(() => {
-    queryRef.current = query;
+    SearchStorage.saveQuery(query);
   }, [query]);
-
-  useEffect(() => {
-    return () => {
-      SearchStorage.saveQuery(queryRef.current);
-    };
-  });
 
   return [query, setQuery];
 }

@@ -70,19 +70,15 @@ function PeopleList({ query }: Props) {
     content = (
       <>
         <ul className={styles.peopleList}>
-          {peopleList.results.map(({ name, height, url, mass }) => {
+          {peopleList.results.map((people) => {
             return (
               <li
-                onClick={(event) => handlePersonClick(event, url)}
+                onClick={(event) => handlePersonClick(event, people.url)}
                 className={styles.people}
-                key={url}
+                key={people.url}
               >
                 {' '}
-                <PeopleItem
-                  name={name ?? ''}
-                  height={height ?? ''}
-                  mass={mass ?? ''}
-                />
+                <PeopleItem people={people} />
               </li>
             );
           })}
