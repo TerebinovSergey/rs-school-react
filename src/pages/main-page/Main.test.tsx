@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import MainPage from './MainPage';
 import { Provider } from 'react-redux';
-import store from '../../store';
+import store from '../../store/store';
 
 describe('MainPage component', () => {
   it('renders Search, PeopleList', () => {

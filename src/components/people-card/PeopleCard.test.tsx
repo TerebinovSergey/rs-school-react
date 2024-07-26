@@ -4,9 +4,10 @@ import { Provider } from 'react-redux';
 import { vi } from 'vitest';
 import { starWarsApi } from '../../services/starWarsApi';
 import PeopleCard from './PeopleCard';
-import { Person, PERSON_PARAM } from '../../services/types';
-import store from '../../store.ts';
+import { PERSON_PARAM } from '../../services/types';
 import { ReactElement } from 'react';
+import store from '../../store/store';
+import { IPerson } from '../../models/IPerson';
 
 const renderWithProviders = (
   ui: ReactElement,
@@ -32,7 +33,7 @@ describe('PeopleCard', () => {
         eye_color: 'blue',
         birth_year: '19BBY',
         gender: 'male',
-      } as Person,
+      } as IPerson,
       isLoading: false,
       isFetching: false,
       isSuccess: true,

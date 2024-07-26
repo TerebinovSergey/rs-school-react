@@ -5,13 +5,7 @@ import { Provider } from 'react-redux';
 import { vi } from 'vitest';
 import PeopleList from './PeopleList';
 import { starWarsApi } from '../../services/starWarsApi';
-import store from '../../store';
-
-/* vi.mock('react-router-dom', () => ({
-  ...vi.importActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-  useLocation: () => mockLocation,
-})); */
+import store from '../../store/store';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -138,30 +132,4 @@ describe('PeopleList', () => {
     fireEvent.click(screen.getByText('1'));
     expect(mockNavigate).toHaveBeenCalledWith('?page=1', { replace: true });
   });
-
-  /* it('navigates to the correct person detail page on item click', () => {
-    const mockData = {
-      count: 1,
-      results: [
-        { name: 'Luke Skywalker', height: '172', mass: '77', url: '1' },
-      ],
-    };
-
-    vi.spyOn(starWarsApi, 'useGetPeopleQuery').mockReturnValue({
-      data: mockData,
-      isLoading: false,
-      isFetching: false,
-      isSuccess: true,
-      isError: false,
-      error: null,
-      refetch: vi.fn(),
-    });
-
-    renderWithProviders(<PeopleList query="Luke" />);
-
-    fireEvent.click(screen.getByText('Luke Skywalker'));
-    expect(mockNavigate).toHaveBeenCalledWith(
-      `/?${PAGE_PARAM}=1&${PERSON_PARAM}=1`,
-    );
-  }); */
 });

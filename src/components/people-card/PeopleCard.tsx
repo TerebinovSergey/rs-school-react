@@ -8,9 +8,11 @@ function PeopleCard() {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const personId = searchParams.get(PERSON_PARAM);
-  const { data, isLoading } = starWarsApi.useGetPersonQuery(
-    Number(personId ?? 0),
-  );
+  const {
+    data: person,
+    isLoading,
+    isFetching,
+  } = starWarsApi.useGetPersonQuery(Number(personId ?? 0));
 
   const handleClose = () => {
     searchParams.delete(PERSON_PARAM);
@@ -19,24 +21,27 @@ function PeopleCard() {
 
   if (!personId) return <></>;
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <Loader />;
   }
 
-  if (!data) return <></>;
+  if (!person) return <></>;
+
+  const { name, height, mass, skin_color, eye_color, birth_year, gender } =
+    person;
 
   const personDetails = [
-    { label: 'Name', value: data.name, id: 1 },
-    { label: 'Height', value: data.height, id: 2 },
-    { label: 'Mass', value: data.mass, id: 3 },
+    { label: 'Name', value: name, id: 1 },
+    { label: 'Height', value: height, id: 2 },
+    { label: 'Mass', value: mass, id: 3 },
     {
       label: 'Skin color',
-      value: data.skin_color,
+      value: skin_color,
       id: 4,
     },
-    { label: 'Eye color', value: data.eye_color, id: 5 },
-    { label: 'Birthday', value: data.birth_year, id: 6 },
-    { label: 'Gender', value: data.gender, id: 7 },
+    { label: 'Eye color', value: eye_color, id: 5 },
+    { label: 'Birthday', value: birth_year, id: 6 },
+    { label: 'Gender', value: gender, id: 7 },
   ];
 
   return (

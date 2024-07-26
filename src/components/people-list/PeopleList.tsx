@@ -20,18 +20,23 @@ function PeopleList({ query }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
-  const { data, error, isLoading } = starWarsApi.useGetPeopleQuery({
+  const {
+    data: peopleList,
+    error,
+    isLoading,
+    isFetching,
+  } = starWarsApi.useGetPeopleQuery({
     query,
     page: currentPage,
   });
 
   useEffect(() => {
-    if (!data || data.count === undefined || error !== undefined) {
+    if (!peopleList || peopleList.count === undefined || error !== undefined) {
       navigate(`?page=1`);
       setCurrentPage(1);
       return;
     }
-  }, [data, error, navigate]);
+  }, [peopleList, error, navigate]);
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -55,41 +60,47 @@ function PeopleList({ query }: Props) {
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  let content: JSX.Element;
 
-  if (!data || data.count === 0) {
-    return <h3>Not found</h3>;
+  if (isLoading || isFetching) {
+    content = <Loader />;
+  } else if (!peopleList || peopleList.count === 0) {
+    content = <h3>Not found</h3>;
+  } else {
+    content = (
+      <>
+        <ul className={styles.peopleList}>
+          {peopleList.results.map(({ name, height, url, mass }) => {
+            return (
+              <li
+                onClick={(event) => handlePersonClick(event, url)}
+                className={styles.people}
+                key={url}
+              >
+                {' '}
+                <PeopleItem
+                  name={name ?? ''}
+                  height={height ?? ''}
+                  mass={mass ?? ''}
+                />
+              </li>
+            );
+          })}
+        </ul>
+        <Pagination
+          totalItems={peopleList.count}
+          itemsPerPage={ITEMS_PER_PAGE}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      </>
+    );
   }
 
   return (
     <>
       <Title title="People" />
-      <ul className={styles.peopleList}>
-        {data.results.map(({ name, height, url, mass }) => {
-          return (
-            <li
-              onClick={(event) => handlePersonClick(event, url)}
-              className={styles.people}
-              key={url}
-            >
-              {' '}
-              <PeopleItem
-                name={name ?? ''}
-                height={height ?? ''}
-                mass={mass ?? ''}
-              />
-            </li>
-          );
-        })}
-      </ul>
-      <Pagination
-        totalItems={data.count}
-        itemsPerPage={ITEMS_PER_PAGE}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      {content}
     </>
   );
 }
