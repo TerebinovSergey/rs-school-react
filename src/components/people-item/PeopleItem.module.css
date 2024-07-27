@@ -1,8 +1,10 @@
+@import url('../../index.css');
+
 .people {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #3eadf7;
+  border: 1px solid var(--blue-color);
   border-radius: 15px;
   transition: all 0.3s;
 }

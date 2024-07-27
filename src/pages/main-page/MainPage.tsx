@@ -6,6 +6,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import styles from './MainPage.module.css';
 import { PagePaths } from '../../utils/utils.ts';
 import { PERSON_PARAM } from '../../services/types.ts';
+import SavePeople from '../../components/save-people/SavePeople.tsx';
 
 function MainPage() {
   const [searchQuery, setSearchQuery] = useState(SearchStorage.getQuery());
@@ -30,6 +31,7 @@ function MainPage() {
         </div>
         <div className={styles.rightPanel}>
           <Outlet />
+          <SavePeople />
         </div>
       </section>
     </div>

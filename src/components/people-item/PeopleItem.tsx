@@ -56,7 +56,7 @@ function PeopleItem({ people }: Props) {
         <span>{mass}</span>
       </div>
       <Checkbox
-        label={checked ? 'remove' : 'add'}
+        label="selected"
         checked={checked}
         onChange={handleCheckboxChange}
       />

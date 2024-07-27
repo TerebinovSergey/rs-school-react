@@ -21,9 +21,13 @@ const selectedPeopleSlice = createSlice({
         (people) => people.url !== action.payload.url,
       );
     },
+    removeAllPeople: (state) => {
+      state.selectedPeople = [];
+    },
   },
 });
 
-export const { addPeople, removePeople } = selectedPeopleSlice.actions;
+export const { addPeople, removePeople, removeAllPeople } =
+  selectedPeopleSlice.actions;
 
 export default selectedPeopleSlice.reducer;

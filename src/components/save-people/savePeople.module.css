@@ -1,7 +1,10 @@
 @import url('../../index.css');
 
-.personCard {
-  padding: 10px 30px;
+.saveWrapper {
+  position: fixed;
+  right: 10%;
+  bottom: 80px;
+  padding: 20px;
   display: flex;
   gap: 10px;
   flex-direction: column;
@@ -9,7 +12,6 @@
   border-radius: 15px;
 }
 
-.personCard__subtitle {
-  font-size: large;
-  font-weight: 600;
+.selected {
+  font-size: 1.5rem;
 }

@@ -1,4 +1,6 @@
+@import url('../../index.css');
+
 .title {
   text-align: center;
-  color: #3eadf7;
+  color: var(----blue-color);
 }
