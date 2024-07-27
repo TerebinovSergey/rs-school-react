@@ -6,7 +6,7 @@ export interface PersonState {
   person: IPerson;
 }
 
-const initialState: PersonState = {
+export const initialState: PersonState = {
   person: personInit,
 };
 

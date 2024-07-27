@@ -3,6 +3,7 @@ import selectedPeopleReducer, {
   addPeople,
   initialState,
   removePeople,
+  removeAllPeople,
 } from './selectedPeopleSlice';
 import { IPeople } from '../../models/IPeople';
 
@@ -36,5 +37,12 @@ describe('selectedPeople slice', () => {
     state = selectedPeopleReducer(state, addPeople(person2));
     state = selectedPeopleReducer(state, removePeople(person1));
     expect(state.selectedPeople).toEqual([person2]);
+  });
+
+  it('handle removeAllPeople', () => {
+    let state = selectedPeopleReducer(initialState, addPeople(person1));
+    state = selectedPeopleReducer(state, addPeople(person2));
+    state = selectedPeopleReducer(state, removeAllPeople());
+    expect(state.selectedPeople).toEqual([]);
   });
 });
