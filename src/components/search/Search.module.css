@@ -1,0 +1,21 @@
+@import url('../../index.css');
+
+.formSearch {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.formSearch__input {
+  padding: 5px;
+  min-width: 40%;
+  border-radius: 10px;
+  border: 1px solid var(--blue-color);
+  font-size: 1rem;
+}
+.formSearch__input:focus,
+.formSearch__button:focus {
+  outline: none;
+}

@@ -1,0 +1,32 @@
+@import url('../../index.css');
+
+.saveWrapper {
+  padding: 30px 20px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  border: 1px solid var(--blue-color);
+  border-radius: 15px;
+  margin-top: auto;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.light {
+  background-color: #f3f1f1;
+  color: #000000;
+}
+
+.dark {
+  background-color: #525151;
+  color: #ffffff;
+}
+
+.saveButton,
+.saveLink {
+  width: 100%;
+  max-width: 300px;
+}
