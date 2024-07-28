@@ -17,8 +17,11 @@ const personSlice = createSlice({
     setPerson: (state, action: PayloadAction<IPerson>) => {
       state.person = action.payload;
     },
+    removePerson: (state) => {
+      state.person = personInit;
+    },
   },
 });
 
-export const { setPerson } = personSlice.actions;
+export const { setPerson, removePerson } = personSlice.actions;
 export default personSlice.reducer;

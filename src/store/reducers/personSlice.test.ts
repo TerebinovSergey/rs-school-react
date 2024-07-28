@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import personReducer, { setPerson, initialState } from './personSlice';
+import personReducer, {
+  setPerson,
+  initialState,
+  removePerson,
+} from './personSlice';
 import { IPerson } from '../../models/IPerson';
 
 describe('person slice', () => {
@@ -22,5 +26,11 @@ describe('person slice', () => {
   it('handle setPerson', () => {
     const actual = personReducer(initialState, setPerson(mockPeople));
     expect(actual.person).toEqual(mockPeople);
+  });
+
+  it('handle removePerson', () => {
+    let actual = personReducer(initialState, setPerson(mockPeople));
+    actual = personReducer(actual, removePerson());
+    expect(actual).toEqual(initialState);
   });
 });

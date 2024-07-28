@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './SavePeople.module.css';
 import { RootState } from '../../store/store';
 import { removeAllPeople } from '../../store/reducers/selectedPeopleSlice';
 import { useRef, useState } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
+//import './SavePeople.css';
+import styles from './SavePeople.module.css';
 
 const SavePeople = () => {
+  const { theme } = useTheme();
   const selectedPeople = useSelector(
     (state: RootState) => state.selectedPeople.selectedPeople,
   );
@@ -41,13 +44,25 @@ const SavePeople = () => {
   }
 
   return (
-    <div className={styles.saveWrapper}>
+    <div className={`${styles.saveWrapper} ${styles[theme]}`}>
       <span
-        className={styles.selected}
+        className={styles.title}
       >{`selected ${selectedPeople.length}`}</span>
-      <button onClick={handleRemoveSelectedPeople}>Unselect all</button>
-      <a ref={linkRef} download={fileName} href={link}>
-        <button onClick={download}>Download</button>
+      <button
+        className={styles.saveButton}
+        onClick={handleRemoveSelectedPeople}
+      >
+        Unselect all
+      </button>
+      <a
+        className={styles.saveLink}
+        ref={linkRef}
+        download={fileName}
+        href={link}
+      >
+        <button className={styles.saveButton} onClick={download}>
+          Download
+        </button>
       </a>
     </div>
   );

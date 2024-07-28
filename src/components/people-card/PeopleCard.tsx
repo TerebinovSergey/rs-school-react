@@ -3,23 +3,31 @@ import Loader from '../loader/Loader.tsx';
 import styles from './PeopleCard.module.css';
 import { useNavigate } from 'react-router-dom';
 import { starWarsApi } from '../../services/starWarsApi.ts';
+import { useDispatch } from 'react-redux';
+import { removePerson } from '../../store/reducers/personSlice.ts';
 
 function PeopleCard() {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const personId = searchParams.get(PERSON_PARAM);
+  const dispatch = useDispatch();
   const {
     data: person,
     isLoading,
     isFetching,
-  } = starWarsApi.useGetPersonQuery(Number(personId ?? 0));
+  } = starWarsApi.useGetPersonQuery(Number(personId), {
+    skip: !personId,
+  });
 
   const handleClose = () => {
     searchParams.delete(PERSON_PARAM);
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  if (!personId) return <></>;
+  if (!personId) {
+    dispatch(removePerson());
+    return <></>;
+  }
 
   if (isLoading || isFetching) {
     return <Loader />;

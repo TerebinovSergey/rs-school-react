@@ -34,7 +34,6 @@ function PeopleList({ query }: Props) {
     if (!peopleList || peopleList.count === undefined || error !== undefined) {
       navigate(`?page=1`);
       setCurrentPage(1);
-      return;
     }
   }, [peopleList, error, navigate]);
 
@@ -67,29 +66,33 @@ function PeopleList({ query }: Props) {
   } else if (!peopleList || peopleList.count === 0) {
     content = <h3>Not found</h3>;
   } else {
-    content = (
-      <>
-        <ul className={styles.peopleList}>
-          {peopleList.results.map((people) => {
-            return (
-              <li
-                onClick={(event) => handlePersonClick(event, people.url)}
-                className={styles.people}
-                key={people.url}
-              >
-                {' '}
-                <PeopleItem people={people} />
-              </li>
-            );
-          })}
-        </ul>
+    return (
+      <div className={styles.wrapperPeopleList}>
+        <div>
+          <Title title="People" />
+          <ul className={styles.peopleList}>
+            {peopleList.results.map((people) => {
+              return (
+                <li
+                  onClick={(event) => handlePersonClick(event, people.url)}
+                  className={styles.people}
+                  key={people.url}
+                >
+                  {' '}
+                  <PeopleItem people={people} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
         <Pagination
           totalItems={peopleList.count}
           itemsPerPage={ITEMS_PER_PAGE}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
-      </>
+      </div>
     );
   }
 
