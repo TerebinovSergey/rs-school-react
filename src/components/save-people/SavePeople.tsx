@@ -3,7 +3,6 @@ import { RootState } from '../../store/store';
 import { removeAllPeople } from '../../store/reducers/selectedPeopleSlice';
 import { useRef, useState } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
-//import './SavePeople.css';
 import styles from './SavePeople.module.css';
 
 const SavePeople = () => {
