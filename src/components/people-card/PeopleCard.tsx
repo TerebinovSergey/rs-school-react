@@ -3,11 +3,13 @@ import Loader from '../loader/Loader.tsx';
 import styles from './PeopleCard.module.css';
 import { useNavigate } from 'react-router-dom';
 import { starWarsApi } from '../../services/starWarsApi.ts';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removePerson } from '../../store/reducers/personSlice.ts';
+import { RootState } from '../../store/store.ts';
 
 function PeopleCard() {
   const navigate = useNavigate();
+  const personState = useSelector((state: RootState) => state.person.person);
   const searchParams = new URLSearchParams(location.search);
   const personId = searchParams.get(PERSON_PARAM);
   const dispatch = useDispatch();
@@ -24,16 +26,17 @@ function PeopleCard() {
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  if (!personId) {
-    dispatch(removePerson());
-    return <></>;
-  }
-
   if (isLoading || isFetching) {
     return <Loader />;
   }
 
-  if (!person) return <></>;
+  if (personState && !person) {
+    dispatch(removePerson());
+  }
+
+  if (!personId || !person) {
+    return <></>;
+  }
 
   const { name, height, mass, skin_color, eye_color, birth_year, gender } =
     person;
