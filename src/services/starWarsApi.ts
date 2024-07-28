@@ -12,7 +12,7 @@ export const starWarsApi = createApi({
     getPeople: builder.query<IListOfPeople, { query: string; page: number }>({
       query: ({ query, page }) =>
         `people/?${PAGE_PARAM}=${page}&${SEARCH_PARAM}=${query}`,
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(setPeople(data.results));
@@ -23,7 +23,7 @@ export const starWarsApi = createApi({
     }),
     getPerson: builder.query<IPerson, number>({
       query: (id) => `people/${id}`,
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(setPerson(data));
