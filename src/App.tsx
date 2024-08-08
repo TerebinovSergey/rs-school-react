@@ -1,5 +1,6 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppRouter from './components/AppRouter.tsx';
+import './global.css';
 import './App.css';
 import Header from './components/header/Header.tsx';
 import { useTheme } from './contexts/ThemeContext.ts';
