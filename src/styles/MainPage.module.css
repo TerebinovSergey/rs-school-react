@@ -1,0 +1,21 @@
+.panelWrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.mainPage {
+  padding-bottom: 10px;
+}
+
+.leftPanel {
+  width: 45%;
+  min-height: 80vh;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 45%;
+}
