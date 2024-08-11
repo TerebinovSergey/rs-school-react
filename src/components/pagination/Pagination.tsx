@@ -1,6 +1,4 @@
-import { Link } from 'react-router-dom';
 import styles from './Pagination.module.css';
-import { PAGE_PARAM } from '../../services/types.ts';
 
 interface Props {
   totalItems: number;
@@ -24,14 +22,13 @@ const Pagination = ({
   return (
     <div className={styles.wrapper}>
       {Array.from({ length: totalPages }, (_, index) => (
-        <Link
+        <div
           key={index}
           onClick={() => handlePageChange(index + 1)}
           className={`${styles.link}${index + 1 === currentPage ? ' ' + styles.disabled : ''}`}
-          to={`?${PAGE_PARAM}=${index + 1}`}
         >
           {index + 1}
-        </Link>
+        </div>
       ))}
     </div>
   );

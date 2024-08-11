@@ -1,40 +1,29 @@
-import { PERSON_PARAM } from '../../services/types.ts';
-import Loader from '../loader/Loader.tsx';
 import styles from './PeopleCard.module.css';
-import { useNavigate } from 'react-router-dom';
-import { starWarsApi } from '../../services/starWarsApi.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { removePerson } from '../../store/reducers/personSlice.ts';
 import { RootState } from '../../store/store.ts';
+import { useRouter } from 'next/router';
+import { PERSON_PARAM } from '../../services/types.ts';
+import { PagePaths } from '../../utils/utils.ts';
+import { useEffect } from 'react';
 
-function PeopleCard() {
-  const navigate = useNavigate();
-  const personState = useSelector((state: RootState) => state.person.person);
-  const searchParams = new URLSearchParams(location.search);
-  const personId = searchParams.get(PERSON_PARAM);
+const PeopleCard = () => {
+  const person = useSelector((state: RootState) => state.person.person);
   const dispatch = useDispatch();
-  const {
-    data: person,
-    isLoading,
-    isFetching,
-  } = starWarsApi.useGetPersonQuery(Number(personId), {
-    skip: !personId,
-  });
+  const router = useRouter();
+
+  useEffect(() => {
+    dispatch(removePerson());
+  }, [dispatch]);
 
   const handleClose = () => {
+    dispatch(removePerson());
+    const searchParams = new URLSearchParams(location.search);
     searchParams.delete(PERSON_PARAM);
-    navigate(`${location.pathname}?${searchParams.toString()}`);
+    router.push(`${PagePaths.Main}?${searchParams.toString()}`);
   };
 
-  if (isLoading || isFetching) {
-    return <Loader />;
-  }
-
-  if (personState && !person) {
-    dispatch(removePerson());
-  }
-
-  if (!personId || !person) {
+  if (!person.name && !person.url) {
     return <></>;
   }
 
@@ -71,6 +60,6 @@ function PeopleCard() {
       </div>
     </div>
   );
-}
+};
 
 export default PeopleCard;

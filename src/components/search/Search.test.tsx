@@ -1,45 +1,93 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import searchReducer, { setSearchName } from '../../store/reducers/searchSlice';
 import Search from './Search';
+import { useRouter } from 'next/router';
 
-vi.mock('../../hooks/useSearchQuery.ts', async (importOriginal) => {
-  const mod =
-    await importOriginal<typeof import('../../hooks/useSearchQuery.ts')>();
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
+
+const mockDispatch = vi.fn();
+
+vi.mock('react-redux', async (importOriginal) => {
+  const module = await importOriginal<typeof import('react-redux')>();
   return {
-    ...mod,
-    useSearchQuery: () => ['', vi.fn()] as const,
+    ...module,
+    useDispatch: () => mockDispatch,
   };
 });
 
-const testValue = 'Luke Skywalker';
+describe('Search Component', () => {
+  let mockRouterPush: ReturnType<typeof vi.fn>;
 
-describe('Search component', () => {
-  it('renders without crashing', () => {
-    render(<Search onSubmit={vi.fn()} />);
+  beforeEach(() => {
+    mockRouterPush = vi.fn();
+    (useRouter as ReturnType<typeof vi.fn>).mockReturnValue({
+      push: mockRouterPush,
+      query: {},
+    });
+  });
+
+  const renderWithStore = (initialState = '') => {
+    const store = configureStore({
+      reducer: {
+        search: searchReducer,
+      },
+      preloadedState: {
+        search: { searchName: initialState },
+      },
+    });
+
+    return render(
+      <Provider store={store}>
+        <Search />
+      </Provider>,
+    );
+  };
+
+  it('should render correctly', () => {
+    renderWithStore('');
     expect(
       screen.getByPlaceholderText("Enter the person's name"),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
   });
 
-  it('calls onSubmit with the query when form is submitted', () => {
-    const onSubmitMock = vi.fn();
-    render(<Search onSubmit={onSubmitMock} />);
-    const inputElement = screen.getByPlaceholderText("Enter the person's name");
-    const formElement = screen.getByTestId('form');
+  it('should update search state on input change', () => {
+    renderWithStore('');
 
-    fireEvent.change(inputElement, { target: { value: testValue } });
-    fireEvent.submit(formElement);
+    const input = screen.getByPlaceholderText(
+      "Enter the person's name",
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'Luke Skywalker' } });
 
-    expect(onSubmitMock).toHaveBeenCalledWith(testValue);
+    expect(input.value).toBe('Luke Skywalker');
   });
 
-  it('updates queryHook value when input changes', () => {
-    render(<Search onSubmit={vi.fn()} />);
-    const inputElement = screen.getByPlaceholderText("Enter the person's name");
+  it('should dispatch setSearchName and navigate on form submit', () => {
+    renderWithStore('');
 
-    fireEvent.change(inputElement, { target: { value: testValue } });
+    const input = screen.getByPlaceholderText(
+      "Enter the person's name",
+    ) as HTMLInputElement;
+    const form = screen.getByTestId('form');
 
-    expect(inputElement).toHaveValue(testValue);
+    fireEvent.change(input, { target: { value: 'Luke' } });
+    fireEvent.submit(form);
+
+    expect(mockDispatch).toHaveBeenCalledWith(setSearchName('Luke'));
+    expect(mockRouterPush).toHaveBeenCalledWith('/?search=Luke&page=1');
+  });
+
+  it('should initialize input with searchName from Redux store', () => {
+    renderWithStore('Leia Organa');
+
+    const input = screen.getByPlaceholderText(
+      "Enter the person's name",
+    ) as HTMLInputElement;
+    expect(input.value).toBe('Leia Organa');
   });
 });

@@ -3,7 +3,24 @@ import { describe, it, expect } from 'vitest';
 import { Provider } from 'react-redux';
 import PeopleItem from './PeopleItem';
 import { IPeople } from '../../models/IPeople';
-import store from '../../store/store';
+import { configureStore } from '@reduxjs/toolkit';
+import { starWarsApi } from '../../services/starWarsApi';
+import selectedPersonReducer from '../../store/reducers/selectedPeopleSlice';
+import peopleReducer from '../../store/reducers/peopleSlice';
+import personReducer from '../../store/reducers/personSlice';
+import searchReducer from '../../store/reducers/searchSlice';
+
+const store = configureStore({
+  reducer: {
+    selectedPeople: selectedPersonReducer,
+    people: peopleReducer,
+    person: personReducer,
+    search: searchReducer,
+    [starWarsApi.reducerPath]: starWarsApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(starWarsApi.middleware),
+});
 
 describe('PeopleItem component', () => {
   const mockPeople: IPeople = {

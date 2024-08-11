@@ -11,6 +11,7 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "types": ["vitest/globals"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",

@@ -3,67 +3,53 @@ import Title from '../title/Title.tsx';
 import PeopleItem from '../people-item/PeopleItem.tsx';
 import styles from './PeopleList.module.css';
 import Loader from '../loader/Loader.tsx';
-import {
-  ITEMS_PER_PAGE,
-  PERSON_PARAM,
-  PAGE_PARAM,
-} from '../../services/types.ts';
+import { ITEMS_PER_PAGE, PERSON_PARAM } from '../../services/types.ts';
 import Pagination from '../pagination/Pagination.tsx';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { starWarsApi } from '../../services/starWarsApi.ts';
+import { useRouter } from 'next/router';
+import { PeopleListProps } from '../../types/props.ts';
+import { RootState } from '../../store/store.ts';
+import { useDispatch, useSelector } from 'react-redux';
+import { IPerson } from '../../models/IPerson.ts';
+import { setPerson } from '../../store/reducers/personSlice.ts';
 
-type Props = {
-  query: string;
-};
-
-function PeopleList({ query }: Props) {
+function PeopleList({ personList, totalCount }: PeopleListProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const {
-    data: peopleList,
-    error,
-    isLoading,
-    isFetching,
-  } = starWarsApi.useGetPeopleQuery({
-    query,
-    page: currentPage,
-  });
+  const search = useSelector((state: RootState) => state.search.searchName);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const isLoading = !Array.isArray(personList);
 
   useEffect(() => {
-    if (!peopleList || peopleList.count === undefined || error !== undefined) {
-      navigate(`?page=1`);
+    if (!personList) {
+      router.push(`/?search=${search}&page=1`);
       setCurrentPage(1);
     }
-  }, [peopleList, error, navigate]);
-
-  useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const page = parseInt(query.get(PAGE_PARAM) || '1', 10);
-    if (page !== Number(query.get(PAGE_PARAM))) {
-      navigate(`?page=${page}`, { replace: true });
-    }
-    setCurrentPage(page);
-  }, [location.search, navigate]);
+  }, [personList, router, search]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    router.push(`/?search=${search}&page=${page}`);
   };
 
-  const handlePersonClick = (event: MouseEvent<HTMLLIElement>, url: string) => {
+  const handlePersonClick = (
+    event: MouseEvent<HTMLLIElement>,
+    person: IPerson,
+  ) => {
     event.stopPropagation();
-    const pathUrl = url.split('/');
+    const pathUrl = person.url.split('/');
     const id = pathUrl[pathUrl.length - 2];
     const searchParams = new URLSearchParams(location.search);
     searchParams.set(PERSON_PARAM, id);
-    navigate(`${location.pathname}?${searchParams.toString()}`);
+    router.push(`${location.pathname}?${searchParams.toString()}`);
+    dispatch(setPerson(person));
   };
 
   let content: JSX.Element;
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     content = <Loader />;
-  } else if (!peopleList || peopleList.count === 0) {
+  } else if (!personList || personList.length === 0) {
     content = <h3>Not found</h3>;
   } else {
     return (
@@ -71,10 +57,10 @@ function PeopleList({ query }: Props) {
         <div>
           <Title title="People" />
           <ul className={styles.peopleList}>
-            {peopleList.results.map((people) => {
+            {personList.map((people) => {
               return (
                 <li
-                  onClick={(event) => handlePersonClick(event, people.url)}
+                  onClick={(event) => handlePersonClick(event, people)}
                   className={styles.people}
                   key={people.url}
                 >
@@ -87,7 +73,7 @@ function PeopleList({ query }: Props) {
         </div>
 
         <Pagination
-          totalItems={peopleList.count}
+          totalItems={totalCount}
           itemsPerPage={ITEMS_PER_PAGE}
           currentPage={currentPage}
           onPageChange={handlePageChange}
