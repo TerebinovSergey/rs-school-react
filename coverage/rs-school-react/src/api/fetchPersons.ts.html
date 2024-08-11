@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -88,44 +88,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { GetServerSidePropsContext } from 'next';
 import { IListOfPeople } from '../models/IListOfPeople';
 import { IPerson } from '../models/IPerson';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export const fetchPersons = async (context: GetServerSidePropsContext) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  const { search = '', page = 1 } = context.query;</span>
+export const fetchPersons = async (context: GetServerSidePropsContext) =&gt; {
+  const { search = '', page = 1 } = context.query;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const response = await fetch(</span>
-<span class="cstat-no" title="statement not covered" >    `https://swapi.dev/api/people/?search=${search}&amp;page=${page}`,</span>
-<span class="cstat-no" title="statement not covered" >  );</span>
-<span class="cstat-no" title="statement not covered" >  const peopleList: IListOfPeople = await response.json();</span>
-<span class="cstat-no" title="statement not covered" >  const personList = [];</span>
+  const response = await fetch(
+    `https://swapi.dev/api/people/?search=${search}&amp;page=${page}`,
+  );
+  const peopleList: IListOfPeople = await response.json();
+  const personList = [];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  for (const person of peopleList.results) {</span>
-<span class="cstat-no" title="statement not covered" >    const response = await fetch(person.url);</span>
-<span class="cstat-no" title="statement not covered" >    const personData: IPerson = await response.json();</span>
-<span class="cstat-no" title="statement not covered" >    personList.push(personData);</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+  for (const person of peopleList.results) {
+    const response = await fetch(person.url);
+    const personData: IPerson = await response.json();
+    personList.push(personData);
+  }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return { totalCount: peopleList.count, personList };</span>
-<span class="cstat-no" title="statement not covered" >};</span>
+  return { totalCount: peopleList.count, personList };
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -133,7 +133,7 @@ import { IPerson } from '../models/IPerson';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-11T19:58:03.681Z
+                at 2024-08-11T21:56:59.472Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
